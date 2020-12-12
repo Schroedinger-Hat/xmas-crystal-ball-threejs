@@ -1,6 +1,10 @@
-# xmas-crystal-ball-threejs
- in threeJS
+# Xmas Crystal Ball in Three.js
 
+> A Xmas 2020 easter egg with some crystal ball made in Three.js
+
+![Demo](/../master/assets/demo.png?raw=true "Demo Image")
+
+# Getting Started
 Run the following commands:
 
 ```
