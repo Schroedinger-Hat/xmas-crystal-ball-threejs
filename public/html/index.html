@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js canvas - geometry - cube</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="css/photospheres.css">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	</head>
+	<body>
+		<script src="js/three/three.min.js"></script>
+		<script src="js/three/Projector.js"></script>
+		<script src="js/three/CanvasRenderer.js"></script>
+
+		<script>
+			var cameraController;
+			var container;
+			var backButton;
+			var nextButton;
+			var blogtext;
+			var isDragging;
+			var camera, scene, renderer;
+			var currentSphere;
+			var previousMousePosition;
+			var autoRotationQuaternion;
+			var index;
+			materials = [];
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+			var insideSphere = false;
+			var numSpheres = 0;
+			var distance;
+			var textArray;
+			var info;
+
+			function getParameterByName(name){
+				url = window.location.href;
+				name = name.replace(/[\[\]]/g, "\\$&");
+				let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+				results = regex.exec(url);
+
+				if (!results) return null;
+				if (!results[2]) return null;
+				return decodeURIComponent(results[2].replace(/\+/g, " "));
+			}
+
+			index = parseInt(getParameterByName('page'));
+			if (!index) index = 0;
+
+			init();
+			animate();
+
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				nextButton = document.createElement('BUTTON');
+				var buttonNextArrow = document.createTextNode('>');
+				nextButton.appendChild(buttonNextArrow);
+				nextButton.id = "nextbutton";
+				nextButton.onclick = nextIndex;
+				container.appendChild(nextButton);
+
+				backButton = document.createElement('BUTTON');
+				var buttonBackArrow = document.createTextNode('<');
+				backButton.appendChild(buttonBackArrow);
+				backButton.id = "backbutton";
+				backButton.onclick = prevIndex;
+				container.appendChild(backButton);
+
+				info = document.createElement( 'div' );
+				info.style.position = 'absolute';
+				info.style.top = '10px';
+				info.style.width = '100%';
+				info.style.textAlign = 'center';
+				info.style.opacity = '0.5';
+				info.innerHTML = 'Double click to enter';
+				container.appendChild( info );
+
+				blogtext = document.createElement( 'div' );
+				blogtext.style.position = 'absolute';
+				blogtext.style.display = 'none';
+				blogtext.id = 'blogtext';
+				blogtext.onmouseover = function (){ blogtext.style.opacity = '0.8'};
+				blogtext.onmouseout = function (){blogtext.style.opacity = '0.5'};
+				container.appendChild(blogtext);
+
+				scene = new THREE.Scene();
+				scene.background = new THREE.Color(0x2e3440);
+
+				camera = new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 1, 4000 );
+				camera.position.x = 300 * index;
+				camera.position.y = 55;
+				camera.position.z = 250;
+
+				imageArray = ['img/photospheres/test.jpg', 'img/photospheres/test.jpg', 'img/photospheres/test.jpg', 'img/photospheres/test.jpg', 'img/photospheres/test.jpg'];
+
+				textArray = ['Description here',
+				'Description here',
+				'Description here',
+				'Description here',
+				'Description here',]
+				numSpheres = imageArray.length;
+				sphereArray = [];
+				meshSphereArray = [];
+
+				cameraController = new CameraController (camera);
+				geometry = new THREE.SphereGeometry(100, 32, 32);
+
+				for (i=0; i<numSpheres; i++){
+					materials.push(new THREE.MeshBasicMaterial({
+						map: THREE.ImageUtils.loadTexture(imageArray[i]),
+						
+					}));
+					materials[i].transparent= true;
+					sphereArray.push(new THREE.Mesh(geometry,materials[i]));
+					sphereArray[i].position.set(300*i,0,0);
+					sphereArray[i].name = "mainsphere";
+				}
+
+				//set the first sphere mesh
+				currentSphere = sphereArray[index];
+				scene.add(currentSphere);
+
+
+				//adding my basic wiremesh spheres
+				for (i=0; i<numSpheres; i++){
+					meshSphereArray.push(new THREE.Mesh(
+							new THREE.SphereGeometry(105, 128, 64),
+							new THREE.MeshBasicMaterial({
+								color : 0xffffff,
+								transparent: true,
+								opacity: 0.5
+							})));
+					meshSphereArray[i].position.set (300*i,0,0);
+					scene.add(meshSphereArray[i]);
+					
+					const mesh = new THREE.Mesh(
+						new THREE.SphereGeometry(60, 64, 64, 6, 6, 1, 0.8),
+						new THREE.MeshBasicMaterial({
+							color : 0xCCCCCC,
+							transparent: true,
+							opacity: 0.9
+						})
+					);
+					mesh.position.set(300*i,-80,25);
+					scene.add(mesh);
+				}
+
+				//set auto rotation of current sphere
+				autoRotationQuaternion = new THREE.Quaternion()
+				.setFromEuler(new THREE.Euler(
+					0,
+					0.002,
+					0,
+					'XYZ'
+				));
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setClearColor( 0xf0f0f0 );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+				//stats = new Stats();
+				//container.appendChild( stats.dom );
+				window.addEventListener( 'resize', onWindowResize, false );
+				//document.addEventListener('touchstart', onDoubleClick, false);
+				document.addEventListener('mousedown', function(e){ isDragging = true}, false);
+				document.addEventListener('mouseup', function(e){ isDragging = false}, false);
+				document.addEventListener('mousemove', onMouseMove, false);
+				document.addEventListener('dblclick', onDoubleClick, false);
+
+
+				previousMousePosition = {
+					x: 0,
+					y: 0
+				};
+
+			}
+
+			function onMouseMove(e){
+
+				var deltaMove = {
+					x: e.offsetX-previousMousePosition.x,
+					y: e.offsetY-previousMousePosition.y
+				};
+
+				if(isDragging) {
+					var deltaRotationQuaternion = new THREE.Quaternion()
+					.setFromEuler(new THREE.Euler(
+						toRadians(-deltaMove.y * 0.1),
+						toRadians(-deltaMove.x * 0.1),
+						0,
+						'XYZ'
+					));
+
+					currentSphere.quaternion.multiplyQuaternions(deltaRotationQuaternion, currentSphere.quaternion);
+				}
+
+				previousMousePosition = {
+				x: e.offsetX,
+				y: e.offsetY
+				};
+			}
+
+			function toRadians(angle) {
+				return angle * (Math.PI / 180);
+			}
+
+			function nextIndex() {
+				index++;
+				cameraController.state = 0;
+				cameraController.destination = 300*index;
+				if(index > numSpheres-1) {
+					index =0;
+					cameraController.state = 2;
+				}
+				if (index == 0) backButton.style.display = 'none';
+				else backButton.style.display = 'inline'
+				history.replaceState({},"page", "?page=" + `${index}`);
+			}
+
+			function prevIndex() {
+				index--;
+				if (index ==0 ) backButton.style.display = 'none'; // cant go back anymore!
+				cameraController.state = 5;
+				cameraController.destination = 300*index;
+				history.replaceState({},"page", "?page=" + `${index}`);
+			}
+
+			//camera controller class that handles switching between spheres, and zooming in/out of spehres
+			function CameraController (camera) {
+    		this.camera = camera;
+				this.destination = 0;
+				this.state = -1;
+				this.update = function() {
+					switch(this.state) {
+    				case 0:
+							camera.position.x += 5;
+							currentSphere.material.opacity = Math.max(0, currentSphere.material.opacity - 0.01);
+							if (camera.position.x > this.destination) {
+								var selectedObject = scene.getObjectByName("mainsphere");
+								scene.remove(selectedObject);
+								currentSphere = sphereArray[index];
+								currentSphere.material.opacity = 0;
+								scene.add(currentSphere);
+								this.state = 1;
+							}
+        		break;
+
+						case 5:
+							camera.position.x -= 5;
+							currentSphere.material.opacity = Math.max(0, currentSphere.material.opacity - 0.01);
+							if (camera.position.x < this.destination) {
+								var selectedObject = scene.getObjectByName("mainsphere");
+								scene.remove(selectedObject);
+								currentSphere = sphereArray[index];
+								currentSphere.material.opacity = 0;
+								scene.add(currentSphere);
+								this.state = 1;
+							}
+        		break;
+
+    				case 1:
+							if (currentSphere.material.opacity < 1){
+								currentSphere.material.opacity += 0.01;
+							} else {
+								this.state = -1;
+							}
+        		break;
+
+						case 2:
+							camera.position.x += 5;
+							if( camera.position.x > numSpheres*300+100){
+								camera.position.x  = -200;
+							} else if (camera.position.x == 0){
+								reset = false;
+								var selectedObject = scene.getObjectByName("mainsphere");
+								scene.remove(selectedObject);
+								currentSphere = sphereArray[index];
+								currentSphere.material.opacity = 0;
+								scene.add(currentSphere);
+								this.state = 1;
+							}
+						break;
+
+						case 3:
+							if (distance < 50){
+								this.state = -1;
+								currentSphere.material.opacity = 1.0;
+								blogtext.style.display = 'inline';
+								blogtext.innerHTML = textArray[index]
+
+								backButton.style.display = 'none';
+								nextButton.style.display = 'none';
+								info.innerHTML = 'Double click to exit'
+
+							} else if (distance < 90) {
+								camera.position.sub(currentSphere.position).multiplyScalar(0.99).add(currentSphere.position);
+								currentSphere.scale.x = -1;
+								currentSphere.material.opacity += 0.05;
+							} else if (distance > 90) {
+								camera.position.sub(currentSphere.position).multiplyScalar(0.99).add(currentSphere.position);
+								currentSphere.material.opacity = Math.max(0, currentSphere.material.opacity - 0.01);
+							}
+						break;
+
+						case 4:
+							if (distance > 250){
+								this.state = -1;
+								currentSphere.material.opacity = 1.0;
+							} else if (distance < 130) {
+								camera.position.sub(currentSphere.position).multiplyScalar(1.01).add(currentSphere.position);
+								currentSphere.material.opacity = Math.max(0, currentSphere.material.opacity - 0.01);
+							} else if (distance> 130) {
+								camera.position.sub(currentSphere.position).multiplyScalar(1.01).add(currentSphere.position);
+								currentSphere.scale.x = 1;
+								currentSphere.material.opacity = Math.min(1, currentSphere.material.opacity + 0.015);
+								blogtext.style.display = 'none';
+								backButton.style.display = 'inline';
+								nextButton.style.display = 'inline';
+								info.innerHTML = 'Double click to enter';
+							}
+						}
+					}
+				}
+
+
+			function onDoubleClick() {
+				if(insideSphere) {
+					insideSphere = false;
+					cameraController.state = 4;
+				} else {
+					insideSphere = true;
+					cameraController.state = 3;
+				}
+			}
+
+			function onWindowResize() {
+				windowHalfX = window.innerWidth / 2;
+				windowHalfY = window.innerHeight / 2;
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			function animate() {
+				requestAnimationFrame( animate );
+				//stats.begin();
+				render();
+				//stats.end();
+			}
+
+			function render() {
+				let look = new THREE.Vector3(0,-50,-200);
+			 	distance = camera.position.distanceTo(currentSphere.position);
+				cameraController.update();
+				camera.lookAt(look.add(camera.position));
+				camera.updateProjectionMatrix();
+
+				//rotate all spheres, always
+				meshSphereArray.forEach(function(entry) {
+    			entry.rotation.y = Date.now()*0.0001;
+				});
+				//currentSphere.rotation.y = Date.now()*0.0001;
+				currentSphere.quaternion.multiplyQuaternions(autoRotationQuaternion, currentSphere.quaternion);
+				renderer.render( scene, camera );
+			}
+
+		</script>
+	</body>
+</html>

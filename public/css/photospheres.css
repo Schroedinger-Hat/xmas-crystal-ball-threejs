@@ -1,0 +1,54 @@
+body {
+font-family: Monospace;
+background-color: white;
+margin: 0px;
+overflow: hidden;
+}
+
+#blogtext {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    width: 20%;
+    background-color: white;
+    opacity: 0.5;
+    text-align: justify;
+    padding: 20px;
+    line-height: 20px;
+}
+#blogtext a {
+  color: black;
+  opacity: 0.5;
+}
+
+#nextbutton {
+    position: absolute;
+    top: 50%;
+    left: 90%;
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 20px;
+    color: gray;
+    font: Arial;
+    font-style: bold;
+    z-index: 2;
+    cursor : pointer;
+    outline : 0px;
+}
+#backbutton {
+    position: absolute;
+    top: 50%;
+    right: 90%;
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 20px;
+    color: gray;
+    font: Arial;
+    font-style: bold;
+    z-index: 2;
+    cursor : pointer;
+    outline : 0px;
+    display: none;
+}
