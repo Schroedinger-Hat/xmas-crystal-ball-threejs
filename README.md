@@ -19,6 +19,8 @@ Then open http://127.0.0.1:8081 in a web browser.
 
 Based on the [photosphere repo](https://github.com/sneha-belkhale/photospheres-threejs)
 
+[Image credits to ESO](https://www.eso.org/public/images/potw2046a/)
+
 # License
 
 MIT
