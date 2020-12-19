@@ -2,7 +2,7 @@
 
 > A Xmas 2020 easter egg with some crystal ball made in Three.js
 
-![Demo](/../master/assets/demo.png?raw=true "Demo Image")
+![Demo](/../master/assets/social.png?raw=true "Demo Image")
 
 # Getting Started
 Run the following commands:

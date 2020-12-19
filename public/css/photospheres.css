@@ -21,6 +21,17 @@ body {
   opacity: 0.5;
 }
 
+#logo {
+  position: absolute;
+  bottom: 0.3em;
+  width: 100%;
+  text-align: center;
+}
+
+#logo img {
+  margin: auto;
+}
+
 /**
 * Text style
 */
@@ -46,7 +57,7 @@ body {
   text-shadow: 1px 1px 5px #757575;
   color: #eceff4;
   margin: 1.3em 0;
-  font-size: 2.2em;
+  font-size: 2.2rem;
 }
 
 #left-text p:nth-of-type(1) {
@@ -59,7 +70,6 @@ body {
 
 #left-text p:nth-of-type(2),
 #right-text p:nth-of-type(2) {
-  font-size: 1.8em;
   text-align: center;
 }
 
@@ -220,4 +230,28 @@ body {
       box-shadow: 0px 4.6666666667px 24px 3px rgba(247, 0, 148, 0.2);
     }
   }
-  
+
+@media screen and (max-width: 1280px) {
+  #left-text, #right-text {
+    width: 20%;
+    top: 15%;
+  }
+
+  #left-text p, #right-text p {
+    font-size: 1.5em;
+    text-align: center !important;
+  }
+
+  #left-text {
+    left: 3%;
+  }
+  #right-text {
+    right: 3%;
+  }
+}
+
+@media screen and (max-width: 920px) {
+  #left-text, #right-text {
+    display: none;
+  }
+}

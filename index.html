@@ -4,11 +4,20 @@
 <head>
 	<title>Merry XMas from Schrödinger Hat</title>
 	<meta charset="utf-8">
-	<meta name="description" content="We wish you a merry XMas 2020" />
+	<meta name="theme-color" content="#000">
+	<meta name="description" content="We wish you a Merry XMas 2020 and a Happy New Year" />
 	<link rel="stylesheet" href="public/css/photospheres.css">
 	<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display" rel=stylesheet />
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<link rel=icon type=image/png sizes=32x32 href=/assets/favicon-32x32.png>
+	<meta name="og:type" content="website">
+	<meta name="og:image" content="https://xmas2020.schrodinger-hat.it/assets/social.png">
+	<meta name="og:title" content="Merry XMas from Schrödinger Hat">
+	<meta name="og:site_name" content="Merry XMas from Schrödinger Hat">
+	<meta name="og:description" content="We wish you a Merry XMas 2020 and a Happy New Year">
+	<meta name="twitter:image" content="https://xmas2020.schrodinger-hat.it/assets/social.png">
+	<meta name="twitter:title" content="Merry XMas from Schrödinger Hat">
+	<meta name="twitter:description" content="We wish you a Merry XMas 2020 and a Happy New Year">
 </head>
 
 <body>
@@ -59,16 +68,17 @@
 
 	<div id="left-text">
 		<p>Questo è il nostro augurio per un buon natale 2020</p>
-		<p>Non odiamo nessuno, ma apprezziamo solo poche persone</p>
-		<p>brainrepo come presidente dell'universo, come unico nostro desiderio</p>
+		<p>Guardiamo alle stelle, per rilassarci e scrutrare l'infinito</p>
+		<p>Speriamo di aver rallegrato le vostre ore in questi periodi</p>
 	</div>
 
 	<div id="right-text">
-		<p>Questo è il nostro augurio per un dannato natale 2020</p>
-		<p>Non amiamo nessuno, ma odiamo solo poche persone</p>
-		<p>mich come presidente dell'universo, come unico nostro timore</p>
+		<p>Vi auguriamo un 2021 ricco di sfide e cambiamenti</p>
+		<p>Di ispirazione, di divulgazione e di crescita personale</p>
+		<p>Ci sentiamo nel 2021 più carichi e spumeggianti che mai!</p>
 	</div>
 
+	<div id="logo"><a href="https://www.schrodinger-hat.it"><img src="assets/favicon-32x32.png" /></a></div>
 
 	<script src="public/js/three/three.min.js"></script>
 	<script src="public/js/three/Projector.js"></script>
@@ -142,7 +152,7 @@
 
 			imageArray = ['public/img/photospheres/galaxy.jpg'];
 
-			textArray = ['<br/>image from <a href="https://www.eso.org/public/images/potw2046a/" target="_blank">ESO</a>']
+			textArray = ['<p>Guardiamo alle stelle per prendere la loro energia, per ispirarci e per rilassarci. Volevamo mettere una immagine di Natale, ma la più appropriata ci è sembrata questa perché libera. Chiunque, quando guarda verso il cielo, rimane affascinato. Così siamo noi. A presto!</p><br/>Image from <a href="https://www.eso.org/public/images/potw2046a/" target="_blank">ESO</a>']
 			numSpheres = imageArray.length;
 			sphereArray = [];
 			meshSphereArray = [];
@@ -206,7 +216,7 @@
 			container.appendChild(renderer.domElement);
 
 			window.addEventListener('resize', onWindowResize, false);
-			//document.addEventListener('touchstart', onDoubleClick, false);
+			document.addEventListener('touchstart', onDoubleClick, false);
 			document.addEventListener('mousedown', function (e) { isDragging = true }, false);
 			document.addEventListener('mouseup', function (e) { isDragging = false }, false);
 			document.addEventListener('mousemove', onMouseMove, false);
@@ -352,11 +362,13 @@
 			if (insideSphere) {
 				insideSphere = false;
 				cameraController.state = 4;
+				document.getElementById('logo').style.opacity = '1';
 				document.getElementById('left-text').style.opacity = '1';
 				document.getElementById('right-text').style.opacity = '1';
 			} else {
 				insideSphere = true;
 				cameraController.state = 3;
+				document.getElementById('logo').style.opacity = '0';
 				document.getElementById('left-text').style.opacity = '0';
 				document.getElementById('right-text').style.opacity = '0';
 			}
