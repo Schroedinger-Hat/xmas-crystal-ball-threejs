@@ -2,12 +2,13 @@
 <html lang="en">
 
 <head>
-	<title>Merry XMas from Schrodinger Hat</title>
+	<title>Merry XMas from Schrödinger Hat</title>
 	<meta charset="utf-8">
 	<meta name="description" content="We wish you a merry XMas 2020" />
 	<link rel="stylesheet" href="public/css/photospheres.css">
 	<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display" rel=stylesheet />
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel=icon type=image/png sizes=32x32 href=/assets/favicon-32x32.png>
 </head>
 
 <body>
@@ -351,9 +352,13 @@
 			if (insideSphere) {
 				insideSphere = false;
 				cameraController.state = 4;
+				document.getElementById('left-text').style.opacity = '1';
+				document.getElementById('right-text').style.opacity = '1';
 			} else {
 				insideSphere = true;
 				cameraController.state = 3;
+				document.getElementById('left-text').style.opacity = '0';
+				document.getElementById('right-text').style.opacity = '0';
 			}
 		}
 

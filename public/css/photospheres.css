@@ -29,20 +29,23 @@ body {
   position: absolute;
   width: 30%;
   top: 20%;
-  left: 2em;
+  left: 1em;
   z-index: 1;
+  opacity: 1;
+  transition: opacity 2.5s ease-in-out;
 }
 
 #right-text {
   left: auto;
   text-align: right;
-  right: 2em;
+  right: 1em;
 }
 
 #left-text p,
 #right-text p {
   text-shadow: 1px 1px 5px #757575;
   color: #eceff4;
+  margin: 1.3em 0;
   font-size: 2.2em;
 }
 
