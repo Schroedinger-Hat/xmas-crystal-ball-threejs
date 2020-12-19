@@ -5,7 +5,7 @@
 	<title>Merry XMas from Schrodinger Hat</title>
 	<meta charset="utf-8">
 	<meta name="description" content="We wish you a merry XMas 2020" />
-	<link rel="stylesheet" href="css/photospheres.css">
+	<link rel="stylesheet" href="public/css/photospheres.css">
 	<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display" rel=stylesheet />
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 </head>
@@ -56,10 +56,22 @@
 		<li></li>
 	</ul>
 
+	<div id="left-text">
+		<p>Questo è il nostro augurio per un buon natale 2020</p>
+		<p>Non odiamo nessuno, ma apprezziamo solo poche persone</p>
+		<p>brainrepo come presidente dell'universo, come unico nostro desiderio</p>
+	</div>
 
-	<script src="js/three/three.min.js"></script>
-	<script src="js/three/Projector.js"></script>
-	<script src="js/three/CanvasRenderer.js"></script>
+	<div id="right-text">
+		<p>Questo è il nostro augurio per un dannato natale 2020</p>
+		<p>Non amiamo nessuno, ma odiamo solo poche persone</p>
+		<p>mich come presidente dell'universo, come unico nostro timore</p>
+	</div>
+
+
+	<script src="public/js/three/three.min.js"></script>
+	<script src="public/js/three/Projector.js"></script>
+	<script src="public/js/three/CanvasRenderer.js"></script>
 
 	<script>
 		var cameraController;
@@ -127,7 +139,7 @@
 			camera.position.y = 55;
 			camera.position.z = 250;
 
-			imageArray = ['img/photospheres/galaxy.jpg'];
+			imageArray = ['public/img/photospheres/galaxy.jpg'];
 
 			textArray = ['<br/>image from <a href="https://www.eso.org/public/images/potw2046a/" target="_blank">ESO</a>']
 			numSpheres = imageArray.length;

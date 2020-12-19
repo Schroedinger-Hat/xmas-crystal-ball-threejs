@@ -21,6 +21,52 @@ body {
   opacity: 0.5;
 }
 
+/**
+* Text style
+*/
+#left-text,
+#right-text {
+  position: absolute;
+  width: 30%;
+  top: 20%;
+  left: 2em;
+  z-index: 1;
+}
+
+#right-text {
+  left: auto;
+  text-align: right;
+  right: 2em;
+}
+
+#left-text p,
+#right-text p {
+  text-shadow: 1px 1px 5px #757575;
+  color: #eceff4;
+  font-size: 2.2em;
+}
+
+#left-text p:nth-of-type(1) {
+  text-align: right;
+}
+
+#right-text p:nth-of-type(1) {
+  text-align: left;
+}
+
+#left-text p:nth-of-type(2),
+#right-text p:nth-of-type(2) {
+  font-size: 1.8em;
+  text-align: center;
+}
+
+#left-text p:nth-of-type(3) {
+  text-align: right;
+}
+
+#right-text p:nth-of-type(3) {
+  text-align: left;
+}
 
 /**
 * Xmas lights from https://codepen.io/tobyj/pen/QjvEex
